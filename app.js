@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const jwt = require('express-jwt')
 const config = require('./config')
+const { ValidationError } = require('express-validation')
 
 
 const userRouter = require('./router/user')
@@ -23,6 +24,11 @@ app.use((err, req, res, next) => {
   // token 解析失败
   if (err.name === 'UnauthorizedError') {
      return res.status(401).send({code: 401, msg: 'token 失效'})
+  }
+
+  // 接口参数验证错误
+  if (err instanceof ValidationError) {
+    return res.status(err.statusCode).send({code: err.statusCode, msg: '参数格式错误'})
   }
 
   res.status(500).send({
