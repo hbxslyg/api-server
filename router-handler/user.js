@@ -21,21 +21,28 @@ const ok = {
 exports.login = (req, res) => {
   const { username, password } = req.body;
 
-  if (username !== "ldk" || password !== "111")
-    return res.send({
-      code: 1,
-      msg: "账号或密码错误",
+  let sql = `select * from ev_users where username=?`
+  db.query(sql, username, (err, result) => {
+    if (err) return res.cc(err);
+
+    if (!result.length) return res.cc("用户名或密码错误");
+
+    const userInfo = result[0];
+
+    if (!bcrypt.compareSync(password, userInfo.password)) return res.cc("用户名或密码错误");
+
+    if (userInfo.status === 1) return res.cc("用户被禁用")
+
+    userInfo.password = undefined
+
+    const token = jwt.sign({data: userInfo}, config.tokenKey, { expiresIn: "600s" });
+
+    res.send({
+      ...ok,
+      data: userInfo,
+      token,
     });
-
-  const token = jwt.sign({ username }, config.tokenKey, { expiresIn: "600s" });
-
-  res.send({
-    ...ok,
-    data: {
-      username,
-    },
-    token,
-  });
+  })
 };
 
 /**
@@ -75,7 +82,7 @@ exports.register = function (req, res) {
   let sql = `select * from ev_users where username=?`;
   db.query(sql, username, (err, result) => {
 
-    if (err) return res.cc();
+    if (err) return res.cc(err);
     if (result.length) return res.cc("用户名被占用");
     
     const salt = bcrypt.genSaltSync(10);
