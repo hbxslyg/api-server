@@ -60,13 +60,8 @@ exports.logout = function (req, res) {
  */
 exports.getUserInfo = function (req, res) {
   res.send({
-    code: 0,
-    msg: "",
-    data: {
-      ...req.auth,
-      iat: undefined,
-      exp: undefined,
-    },
+    ...ok,
+    data: req.auth.data
   });
 };
 
