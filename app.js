@@ -18,6 +18,18 @@ app.use(express.urlencoded({extended: false}))
 // 解析 token 中间件
 app.use(jwt.expressjwt({secret: config.tokenKey, algorithms: ["HS256"]}).unless({path: config.noAuth}))
 
+// 快速响应中间件
+app.use((req, res, next) => {
+  res.cc = (err = "未知错误", code = 1) => {
+    res.send({code, msg: err instanceof Error ? err.name : err})
+  }
+
+  res.ss = (msg = 'ok', code = 0) => {
+    res.send({code, msg})
+  }
+  next()
+})
+
 
 // 注册路由
 app.use('/api/user', userRouter)
