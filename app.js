@@ -18,6 +18,11 @@ app.use(express.urlencoded({extended: false}))
 // 解析 token 中间件
 app.use(jwt.expressjwt({secret: config.tokenKey, algorithms: ["HS256"]}).unless({path: config.noAuth}))
 
+
+// 注册路由
+app.use('/api/user', userRouter)
+
+
 // 捕获错误中间件
 app.use((err, req, res, next) => {
 
@@ -28,7 +33,7 @@ app.use((err, req, res, next) => {
 
   // 接口参数验证错误
   if (err instanceof ValidationError) {
-    return res.status(err.statusCode).send({code: err.statusCode, msg: '参数格式错误'})
+    return res.status(err.statusCode).json({code: err.statusCode, msg: '参数格式错误'})
   }
 
   res.status(500).send({
@@ -36,14 +41,6 @@ app.use((err, req, res, next) => {
     msg: "未知错误"
   })
 })
-
-
-// 注册路由
-app.use('/api/user', userRouter)
-
-
-
-
 
 
 app.listen(2222)
