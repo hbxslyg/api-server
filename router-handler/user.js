@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
+const bcrypt = require("bcryptjs");
+const db = require("../db");
 
 const ok = {
   code: 0,
@@ -62,14 +64,33 @@ exports.getUserInfo = function (req, res) {
 };
 
 /**
-   * 注册
-   * @param {*} req 
-   * @param {*} res 
-   */
+ * 注册
+ * @param {*} req
+ * @param {*} res
+ */
 exports.register = function (req, res) {
-   
-  res.send(ok)
+  const { username, password, email } = req.body;
 
+  // 查询用户名是否存在
+  let sql = `select * from ev_users where username=?`;
+  db.query(sql, username, (err, result) => {
 
+    if (err) return res.cc();
+    if (result.length) return res.cc("用户名被占用");
+    
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    
+    const userInfo = { username, password: hash, email}
 
+    // 插入数据
+    let sql = `insert ev_users set ?`
+    db.query(sql, userInfo, (err, result) => {
+
+      if (err) return server500(res);
+      if (result.affectedRows !== 1) return res.cc();
+
+      res.ss();
+    })
+  });
 };
