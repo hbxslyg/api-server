@@ -63,7 +63,7 @@ exports.getUserInfo = function (req, res) {
   
   const sql = `select * from ev_users where id=?`
   db.query(sql, id, (err, result) => {
-    
+
     if (err) return res.cc(err)
     if (result.length !== 1) return res.cc("查询失败")
     
@@ -76,6 +76,34 @@ exports.getUserInfo = function (req, res) {
     })
   })
 };
+
+
+/**
+ * 修改用户信息
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.updateUserInfo = function (req, res) {
+  const { id, nickname, email } = req.body
+
+  let sql = `select * from ev_users where id=?`;
+  db.query(sql, id, (err, result) => {
+
+    if (err) return res.cc(err);
+    if (!result.length) return res.cc("用户不存在");
+
+    const userInfo = {nickname, email}
+    let sql = `update ev_users set ? where id=?`
+    db.query(sql, [userInfo, id], (err, result) => {
+
+      if (err) return res.cc(err);
+      if (result.affectedRows !== 1) return res.cc("更新失败");
+      res.ss()
+    })
+  })
+
+}
+
 
 /**
  * 注册

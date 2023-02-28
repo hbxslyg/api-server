@@ -23,3 +23,12 @@ exports.getUserInfoSchema = {
     id: Joi.number().required()
   })
 }
+
+exports.updateUserInfoSchema = {
+  body: Joi.object({
+    id: Joi.number().required(),
+    nickname: Joi.string().min(3).max(20),
+    email: Joi.string().email(),
+    avatar: Joi.string().hostname()
+  })
+}
