@@ -59,10 +59,22 @@ exports.logout = function (req, res) {
  * @param {*} res
  */
 exports.getUserInfo = function (req, res) {
-  res.send({
-    ...ok,
-    data: req.auth.data
-  });
+  const { id } = req.body;
+  
+  const sql = `select * from ev_users where id=?`
+  db.query(sql, id, (err, result) => {
+    
+    if (err) return res.cc(err)
+    if (result.length !== 1) return res.cc("查询失败")
+    
+    res.send({
+      ...ok,
+      data: {
+        ...result[0],
+        password: undefined
+      }
+    })
+  })
 };
 
 /**

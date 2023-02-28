@@ -4,7 +4,7 @@ const { validate } = require('express-validation')
 
 const userHandler = require("../router-handler/user")
 
-const { loginSchema, registerSchema } = require('../schema/user')
+const { loginSchema, registerSchema, getUserInfoSchema } = require('../schema/user')
 
 // 登录
 router.post('/login', validate(loginSchema), userHandler.login)
@@ -13,7 +13,7 @@ router.post('/login', validate(loginSchema), userHandler.login)
 router.post('/logout', userHandler.logout)
 
 // 获取用户信息
-router.post('/getUserInfo', userHandler.getUserInfo)
+router.post('/getUserInfo', validate(getUserInfoSchema), userHandler.getUserInfo)
 
 // 注册
 router.post('/register', validate(registerSchema), userHandler.register)

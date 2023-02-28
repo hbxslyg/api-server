@@ -17,3 +17,9 @@ exports.registerSchema = {
     email: Joi.string().email(),
   }),
 };
+
+exports.getUserInfoSchema = {
+  body: Joi.object({
+    id: Joi.number().required()
+  })
+}
