@@ -32,3 +32,10 @@ exports.updateUserInfoSchema = {
     avatar: Joi.string().hostname()
   })
 }
+
+exports.updatePasswordSchema = {
+  body: Joi.object({
+    password,
+    newPassword: password
+  })
+}

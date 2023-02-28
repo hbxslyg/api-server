@@ -101,7 +101,36 @@ exports.updateUserInfo = function (req, res) {
       res.ss()
     })
   })
+}
 
+/**
+ * 修改用户密码
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.updatePassword = function (req, res) {
+  const { password, newPassword } = req.body
+  const id = req.auth.data.id
+
+  let sql = `select password from ev_users where id=?`
+  db.query(sql, id, (err, result) => {
+
+    if (err) return res.cc(err);
+    if (!result.length) return res.cc("用户不存在");
+    if (!bcrypt.compareSync(password, result[0].password)) return res.cc("密码错误");
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
+
+    let sql = `update ev_users set password=? where id=?`
+    db.query(sql, [hash, id], (err, result) => {
+
+      if (err) return res.cc(err);
+      if (result.affectedRows !== 1) return res.cc("更新失败");
+
+      res.ss()
+    })
+  })
 }
 
 
