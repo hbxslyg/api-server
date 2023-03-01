@@ -5,7 +5,8 @@ const router = express.Router()
 const categorizeHandler = require('../router-handler/categorize')
 const {
   addCategorizeSchema,
-  getCategorizeSchema
+  getCategorizeSchema,
+  updateCategorizeSchema
 } = require('../schema/categorize')
 
 
@@ -15,6 +16,9 @@ router.post('/addCategorize', validate(addCategorizeSchema), categorizeHandler.a
 
 // 查询分类
 router.post('/getCategorize', validate(getCategorizeSchema), categorizeHandler.getCategorize)
+
+// 更新分类
+router.post('/updateCategorize', validate(updateCategorizeSchema), categorizeHandler.updateCategorize)
 
 
 module.exports = router

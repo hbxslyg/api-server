@@ -14,3 +14,12 @@ exports.getCategorizeSchema = {
     id: Joi.number()
   })
 }
+
+exports.updateCategorizeSchema = {
+  body: Joi.object({
+    id: Joi.number().required(),
+    name: name,
+    alias: name,
+    status: Joi.number().min(0).max(1)
+  }).min(2)
+}
