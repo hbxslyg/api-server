@@ -89,7 +89,7 @@ exports.getUserInfo = function (req, res) {
  * @param {*} res 
  */
 exports.updateUserInfo = function (req, res) {
-  const { id, nickname, email } = req.body
+  const { id } = req.body
 
   let sql = `select * from ev_users where id=?`;
   db.query(sql, id, (err, result) => {
@@ -97,9 +97,8 @@ exports.updateUserInfo = function (req, res) {
     if (err) return res.cc(err);
     if (!result.length) return res.cc("用户不存在");
 
-    const userInfo = {nickname, email}
     let sql = `update ev_users set ? where id=?`
-    db.query(sql, [userInfo, id], (err, result) => {
+    db.query(sql, [req.body, id], (err, result) => {
 
       if (err) return res.cc(err);
       if (result.affectedRows !== 1) return res.cc("更新失败");
