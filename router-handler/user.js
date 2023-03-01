@@ -133,6 +133,25 @@ exports.updatePassword = function (req, res) {
   })
 }
 
+/**
+ * 修改头像
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.updateAvatar = function (req, res) {
+  const { avatar } = req.body
+  const id = req.auth.data.id
+
+  let sql = `update ev_users set avatar=? where id=?`
+  db.query(sql, [avatar, id], (err, result) => {
+
+    if (err) return res.cc(err)
+    if (result.affectedRows !== 1) return res.cc("修改头像失败")
+
+    res.ss()
+  })
+}
+
 
 /**
  * 注册

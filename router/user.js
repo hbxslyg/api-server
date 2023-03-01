@@ -9,7 +9,8 @@ const {
   registerSchema, 
   getUserInfoSchema, 
   updateUserInfoSchema, 
-  updatePasswordSchema 
+  updatePasswordSchema, 
+  updateAvatarSchema
 } = require('../schema/user')
 
 // 登录
@@ -26,6 +27,9 @@ router.post('/updateUserInfo', validate(updateUserInfoSchema), userHandler.updat
 
 // 修改密码
 router.post('/updatePassword', validate(updatePasswordSchema), userHandler.updatePassword)
+
+// 修改头像
+router.post('/updateAvatar', validate(updateAvatarSchema), userHandler.updateAvatar)
 
 // 注册
 router.post('/register', validate(registerSchema), userHandler.register)
