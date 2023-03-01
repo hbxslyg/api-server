@@ -8,3 +8,9 @@ exports.addCategorizeSchema = {
     alias: name.required()
   })
 }
+
+exports.getCategorizeSchema = {
+  body: Joi.object({
+    id: Joi.number()
+  })
+}
