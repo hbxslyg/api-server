@@ -8,6 +8,7 @@ const { ValidationError } = require('express-validation')
 
 const userRouter = require('./router/user')
 const categorizeRouter = require('./router/categorize')
+const articleRouter = require('./router/article')
 
 const app = express()
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 // 注册路由
 app.use('/api/user', userRouter)
 app.use('/api/categorize', categorizeRouter)
+app.use('/api/article', articleRouter)
 
 
 // 捕获错误中间件
