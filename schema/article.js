@@ -7,3 +7,9 @@ exports.addArticleSchema = {
     categorize_id: Joi.number().required()
   })
 }
+
+exports.getArticleDetailedSchema = {
+  body: Joi.object({
+    id: Joi.number().required()
+  })
+}

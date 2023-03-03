@@ -6,7 +6,7 @@ const multer  = require('multer')
 
 const articleHandler = require('../router-handler/article')
 const { validate } = require('express-validation')
-const { addArticleSchema } = require('../schema/article')
+const { addArticleSchema, getArticleDetailedSchema } = require('../schema/article')
 
 
 const storage = multer.diskStorage({
@@ -19,5 +19,11 @@ const upload = multer({ storage: storage })
 
 // 添加文章
 router.post('/addArticle', upload.single('cover_img'), validate(addArticleSchema), articleHandler.addArticle)
+
+// 获取文章列表
+router.get('/getArticleList', articleHandler.getArticleList)
+
+// 获取文章详情
+router.post('/getArticleDetailed', validate(getArticleDetailedSchema), articleHandler.getArticleDetailed)
 
 module.exports = router
