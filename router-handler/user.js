@@ -37,7 +37,7 @@ exports.login = (req, res) => {
       username: userInfo.username
     }
 
-    const token = jwt.sign({data: tokenData}, config.tokenKey, { expiresIn: "600s" });
+    const token = jwt.sign({data: tokenData}, config.tokenKey, { expiresIn: "3h" });
 
     res.send({
       ...ok,
