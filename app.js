@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const cors = require('cors')
 const jwt = require('express-jwt')
 const config = require('./config')
@@ -9,6 +10,9 @@ const userRouter = require('./router/user')
 const categorizeRouter = require('./router/categorize')
 
 const app = express()
+
+// 配置静态文件路径
+app.use('/files',express.static(path.join(config.uploadPath, './files')))
 
 // 允许跨域
 app.use(cors())
